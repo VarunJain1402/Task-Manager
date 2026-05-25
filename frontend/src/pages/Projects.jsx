@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Compass, UsersRound, X, Edit2 } from "lucide-react";
+import { Plus, Compass, UsersRound, X, Edit2, Trash2 } from "lucide-react";
+import ConfirmationModal from "../components/ConfirmationModal";
 
 const Projects = () => {
   const navigate = useNavigate();
@@ -12,6 +13,8 @@ const Projects = () => {
   const [newProject, setNewProject] = useState({ name: "", description: "" });
   const [editProjectId, setEditProjectId] = useState(null);
   const [error, setError] = useState("");
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState(null);
   
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   const isAdmin = user?.role === "ADMIN";
@@ -63,6 +66,24 @@ const Projects = () => {
     setIsModalOpen(true);
   };
 
+  const handleDeleteProject = (e, projectId) => {
+    e.stopPropagation();
+    setProjectToDelete(projectId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const confirmDeleteProject = async () => {
+    if (!projectToDelete) return;
+    try {
+      await API.delete(`/projects/${projectToDelete}`);
+      fetchProjects();
+      setIsDeleteModalOpen(false);
+      setProjectToDelete(null);
+    } catch (err) {
+      alert(err.response?.data?.message || "Failed to delete project");
+    }
+  };
+
   return (
     <div className="p-4 max-w-7xl mx-auto space-y-8">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -109,13 +130,22 @@ const Projects = () => {
                       </span>
                     </div>
                     {isAdmin && (
-                      <button
-                        onClick={(e) => openEditModal(e, project)}
-                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"
-                        title="Edit Project"
-                      >
-                        <Edit2 className="h-4 w-4" />
-                      </button>
+                      <div className="flex gap-1">
+                        <button
+                          onClick={(e) => openEditModal(e, project)}
+                          className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"
+                          title="Edit Project"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={(e) => handleDeleteProject(e, project._id)}
+                          className="p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                          title="Delete Project"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
                     )}
                   </div>
                   
@@ -234,6 +264,20 @@ const Projects = () => {
           </div>
         )}
       </AnimatePresence>
+
+      <ConfirmationModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => {
+          setIsDeleteModalOpen(false);
+          setProjectToDelete(null);
+        }}
+        onConfirm={confirmDeleteProject}
+        heading="Delete Project"
+        title="Are you sure you want to delete this project? This action cannot be undone."
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
     </div>
   );
 };

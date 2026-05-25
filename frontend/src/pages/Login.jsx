@@ -2,11 +2,12 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
 import { motion } from "framer-motion";
-import { Sparkles, AtSign, KeyRound, ArrowRight } from "lucide-react";
+import { Sparkles, AtSign, KeyRound, ArrowRight, Eye, EyeOff } from "lucide-react";
 
 const Login = ({ setUser }) => {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -83,12 +84,19 @@ const Login = ({ setUser }) => {
               <div className="relative">
                 <KeyRound className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-pink-400" />
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   required
-                  className="glass-input block w-full rounded-2xl py-3.5 pl-12 pr-4 text-slate-800 placeholder-slate-400"
+                  className="glass-input block w-full rounded-2xl py-3.5 pl-12 pr-12 text-slate-800 placeholder-slate-400"
                   placeholder="••••••••"
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
+                >
+                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                </button>
               </div>
             </div>
 

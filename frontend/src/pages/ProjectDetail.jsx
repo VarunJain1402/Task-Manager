@@ -160,7 +160,7 @@ const ProjectDetail = () => {
   ];
 
   return (
-    <div className="p-4 max-w-[1400px] mx-auto h-[calc(100vh-6rem)] flex flex-col">
+    <div className="p-4 max-w-[1400px] mx-auto flex flex-col">
       <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 shrink-0">
         <div>
           <Link to="/projects" className="text-indigo-500 hover:text-indigo-700 font-bold flex items-center gap-1.5 mb-3 text-sm transition-colors">
