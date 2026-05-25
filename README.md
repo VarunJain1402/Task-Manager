@@ -12,7 +12,7 @@
 
 - **Premium Glassmorphic Design:** A stunning, modern interface featuring translucent panels, mesh gradients, and buttery-smooth animations powered by Framer Motion.
 - **Role-Based Access Control (RBAC):**
-  - **Admins:** Can create new projects, assign tasks, and oversee team progress.
+  - **Admins:** Can create,edit, delete projects, assign tasks, and oversee team progress.
   - **Members:** Can view project boards, update task statuses, and focus on their assigned work.
 - **Dynamic Dashboard:** Get a bird's-eye view of your productivity with beautifully designed stat cards and recent activity logs.
 - **Interactive Kanban Boards:** Organize project tasks into "To Do", "In Progress", and "Done" columns.
